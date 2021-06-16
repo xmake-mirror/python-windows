@@ -16,14 +16,14 @@ jobs:
           submodules: false
       - name: prepare python
         run: |
-          python get_python_ps1.py 3.7.9 ${{ matrix.arch }}
-          ./get_python_3.7.9_${{ matrix.arch }}.ps1
+          python get_python_ps1.py 3.8.10 ${{ matrix.arch }}
+          ./get_python_3.8.10_${{ matrix.arch }}.ps1
       - name: publish to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_name: xmake-mirror/python-windows
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: python-3.7.9.win${{ matrix.arch }}.zip
-          asset_name: python-3.7.9.win${{ matrix.arch }}.zip
-          tag: "3.7.9"
-          body: "python for windows 3.7.9"
+          file: python-3.8.10.win${{ matrix.arch }}.zip
+          asset_name: python-3.8.10.win${{ matrix.arch }}.zip
+          tag: "3.8.10"
+          body: "python for windows 3.8.10"
