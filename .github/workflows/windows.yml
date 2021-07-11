@@ -7,6 +7,7 @@ jobs:
     strategy:
       matrix:
         arch: ["32", "64"]
+        version: ["3.9.6"]
     runs-on: windows-latest
     steps:
       - name: checkout
@@ -16,14 +17,23 @@ jobs:
           submodules: false
       - name: prepare python
         run: |
-          python get_python_ps1.py 3.9.5 ${{ matrix.arch }}
-          ./get_python_3.9.5_${{ matrix.arch }}.ps1
-      - name: publish to release
+          python get_python_ps1.py ${{ matrix.version }} ${{ matrix.arch }}
+          ./get_python_${{ matrix.version }}_${{ matrix.arch }}.ps1
+      - name: publish python to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_name: xmake-mirror/python-windows
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: python-3.9.5.win${{ matrix.arch }}.zip
-          asset_name: python-3.9.5.win${{ matrix.arch }}.zip
-          tag: "3.9.5"
-          body: "python for windows 3.9.5"
+          file: python-${{ matrix.version }}.win${{ matrix.arch }}.zip
+          asset_name: python-${{ matrix.version }}.win${{ matrix.arch }}.zip
+          tag: "${{ matrix.version }}"
+          body: "python for windows ${{ matrix.version }}"
+      - name: publish python-launcher to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: xmake-mirror/python-windows
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: python-launcher-${{ matrix.version }}.win${{ matrix.arch }}.zip
+          asset_name: python-launcher-${{ matrix.version }}.win${{ matrix.arch }}.zip
+          tag: "${{ matrix.version }}"
+          body: "python launcher for windows ${{ matrix.version }}"
