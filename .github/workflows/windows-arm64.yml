@@ -1,0 +1,39 @@
+name: windows
+
+on: push
+
+jobs:
+  python:
+    strategy:
+      matrix:
+        arch: ["arm64"]
+        version: ["3.13.2"]
+    runs-on: windows-11-arm
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: false
+      - name: prepare python
+        run: |
+          python get_python_ps1.py ${{ matrix.version }} ${{ matrix.arch }}
+          ./get_python_${{ matrix.version }}_${{ matrix.arch }}.ps1
+      - name: publish python to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: xmake-mirror/python-windows
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: python-${{ matrix.version }}.win${{ matrix.arch }}.zip
+          asset_name: python-${{ matrix.version }}.win${{ matrix.arch }}.zip
+          tag: "${{ matrix.version }}"
+          body: "python for windows ${{ matrix.version }}"
+      - name: publish python-launcher to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_name: xmake-mirror/python-windows
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: python-launcher-${{ matrix.version }}.win${{ matrix.arch }}.zip
+          asset_name: python-launcher-${{ matrix.version }}.win${{ matrix.arch }}.zip
+          tag: "${{ matrix.version }}"
+          body: "python launcher for windows ${{ matrix.version }}"
