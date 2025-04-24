@@ -21,13 +21,24 @@ if __name__ == '__main__':
         print("Usage: python " + __file__ + " <version> <bits>")
         exit(1)
     pyver = sys.argv[1]
-    bits = "64"
+    arch_input = "64"
     if len(sys.argv) > 2:
-        bits = sys.argv[2]
-    suffix = "-amd64" if bits == "64" else ""
-    arch = ".win64" if bits == "64" else ".win32"
+        arch_input = sys.argv[2]
+    if arch_input == "64":
+        suffix = "-amd64"
+        arch = ".win64"
+        dllinst = "Copy-Item -Path C:\Windows\pyshellext.amd64.dll -Destination $InstallPath\launcher\pyshellext.amd64.dll"
+    elif arch_input == "arm64":
+        suffix = "-arm64"
+        arch = ".winarm64"
+        dllinst = ""
+    elif arch_input == "32":
+        suffix = ""
+        arch = ".win32"
+        dllinst = ""
+    else:
+        print(f"Error: Unsupported architecture '{arch_input}'. Use '32', '64', or 'arm64'.")
+        exit(1)
 
-    dllinst = f"Copy-Item -Path C:\Windows\pyshellext.amd64.dll -Destination $InstallPath\launcher\pyshellext.amd64.dll" if bits == "64" else ""
-
-    with open(f"get_python_{pyver}_{bits}.ps1", "w") as f:
+    with open(f"get_python_{pyver}_{arch_input}.ps1", "w") as f:
         f.write(PS1_SOURCE.format(pyver=pyver, suffix=suffix, arch=arch, dllinst=dllinst))
