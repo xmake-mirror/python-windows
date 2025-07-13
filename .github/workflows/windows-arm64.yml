@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         arch: ["arm64"]
-        version: ["3.11.13"]
+        version: ["3.12.10"]
     runs-on: windows-11-arm
     steps:
       - name: checkout
