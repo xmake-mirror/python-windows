@@ -7,7 +7,7 @@ jobs:
     strategy:
       matrix:
         arch: ["32", "64"]
-        version: ["3.13.11"]
+        version: ["3.11.9", "3.13.12", "3.14.3"]
     runs-on: windows-latest
     steps:
       - name: checkout
